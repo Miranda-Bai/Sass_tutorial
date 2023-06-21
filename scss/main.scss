@@ -1,0 +1,63 @@
+@import "./resets";
+@import "./variables";
+
+// @function is used to compute values
+@function weight($weight-name) {
+  @return map-get($font-weights, $weight-name);
+}
+
+// @mixin is used for designing styles
+@mixin flexCenter($direction) {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: $direction;
+}
+
+@mixin theme($light-theme: true) {
+  @if $light-theme {
+    background: lighten($primary-color, 100%);
+    color: darken($text-color, 100%);
+  }
+}
+
+@mixin mobile {
+  @media (max-width: $mobile) {
+    @content;
+  }
+}
+
+body {
+  background: $primary-color;
+  color: $text-color;
+}
+
+.main {
+  @include flexCenter(row);
+  //   width: calc(80% - 40%); // normal css and mix types works, for example: calc(80% - 40px)
+  width: 80% - 40%; // but in Sass, 80% - 40px (mix types computing) doesn't work
+  margin: 0 auto;
+
+  #{&}_paragraph1 {
+    font-weight: weight(bold);
+
+    &:hover {
+      color: pink;
+    }
+  }
+  #{&}_paragraph2 {
+    @extend .main_paragraph1;
+
+    &:hover {
+      color: $accent-color;
+    }
+  }
+
+  @include mobile {
+    flex-direction: column;
+  }
+}
+
+.light {
+  @include theme($light-theme: true);
+}
